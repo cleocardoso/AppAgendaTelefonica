@@ -12,6 +12,8 @@ import React from 'react';
               <Icon name={props.iconName}  style={styles. IconStyle}  />
                  <TextInput
                      placeholderTextColor="#555"
+                     placeholder={props.textInput}
+                     onChangeText={props.onChangeText}
                      style={styles.input} />
              </View>
      )

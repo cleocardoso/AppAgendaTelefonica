@@ -1,4 +1,4 @@
-import React from 'react';//item contato
+import React from 'react';
 
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon3 from 'react-native-vector-icons/AntDesign';

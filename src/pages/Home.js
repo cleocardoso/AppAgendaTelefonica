@@ -7,11 +7,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export function Home() {
 
-    const keyAsyncStorage = "@agenda:contatos";
+    const keyAsyncStorage = "@agenda1:contatos";
 
     const [user, setUser] = useState('');
     const [telefone, setTelefone] = useState('');
     const [contacts, setContacts] = useState([]);
+
+    async function clear(){
+        await AsyncStorage.clear();
+    }
 
     async function salvarContato() {
         const data = {
@@ -19,8 +23,7 @@ export function Home() {
             name: user,
             telefone: telefone
         }
-        const vetData = [...contacts, data];
-
+        const vetData = [...contacts, data]  
         try {
             await AsyncStorage.setItem(keyAsyncStorage, JSON.stringify(vetData));
         } catch (error) {
@@ -37,14 +40,15 @@ export function Home() {
         const newData = contacts.filter( item => item.id != id );
         await AsyncStorage.setItem(keyAsyncStorage, JSON.stringify( newData ));
         
-        setContacts(newData); 
+        //setContacts(newData); 
+        await loadData()
     }
 
     async function loadData(){
         try{
             const retorno = await AsyncStorage.getItem(  keyAsyncStorage  );   
-            const dadosContacts = JSON.parse( retorno )
-            console.log( dadosContacts );
+            const dadosContacts = await JSON.parse( retorno )
+            console.log( 'loadData -> ', dadosContacts );
             setContacts( dadosContacts || [] );
         }catch(error){
             Alert.alert("Erro na leitura  dos contatos");
@@ -52,6 +56,7 @@ export function Home() {
     }
 
     useEffect( ()=>{
+       // clear()
         loadData();      
     } , []);
 
@@ -61,7 +66,7 @@ export function Home() {
             <View style={styles.head}>
                 <Text style={styles.titlehead}>AGENDA TELEFÔNICA</Text>
             </View>
-            {/*onChangeText: funcao para retorna o valor do input*/}
+            
             <View style={styles.formContainer}>
                 <MyInput iconName="user" textInput="Nome" value={user} onChangeText={(e) => setUser(e)} />
                 <MyInput iconName="phone" textInput="Telefone" value={telefone} onChangeText={(e) => setTelefone(e)} keyboardType="numeric" />
